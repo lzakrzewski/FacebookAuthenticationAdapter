@@ -29,6 +29,10 @@ class GuzzleFacebookApi implements FacebookApi
      */
     public function __construct(ClientInterface $client, $redirectUri, $appId, $appSecret, $logger = null)
     {
+        if ($logger !== null && !is_subclass_of($logger, 'Psr\Log\LoggerInterface')) {
+            throw new \InvalidArgumentException('Logger must implement Psr\Log\LoggerInterface.');
+        }
+
         $this->client = $client;
         $this->redirectUri = $redirectUri;
         $this->logger = $logger;

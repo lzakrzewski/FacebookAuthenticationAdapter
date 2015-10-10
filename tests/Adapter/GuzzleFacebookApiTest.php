@@ -47,6 +47,16 @@ class GuzzleFacebookApiTest extends \PHPUnit_Framework_TestCase
         $this->adapter->accessToken('correct-code');
     }
 
+    /**
+     * @test
+     *
+     * @expectedException \InvalidArgumentException
+     */
+    public function it_can_cot_be_created_with_invalid_logger()
+    {
+        new GuzzleFacebookApi($this->guzzleClient, 'http://localhost/facebook/login', '1234', 'secret', new \stdClass());
+    }
+
     /** @test */
     public function it_logs_when_unable_to_parse_token_from_response_during_requesting_for_access_token()
     {
