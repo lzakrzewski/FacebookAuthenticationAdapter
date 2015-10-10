@@ -15,12 +15,14 @@ use Lucaszz\FacebookAuthenticationAdapter\Adapter\GuzzleFacebookApi;
 
 class GuzzleFacebookApiTest extends AdapterTestCase
 {
-    /** @var GuzzleFacebookApi */
-    private $adapter;
     /** @var ClientInterface */
     private $guzzleClient;
     /** @var History */
     private $history;
+    /** @var FakeLogger */
+    private $logger;
+    /** @var GuzzleFacebookApi */
+    private $adapter;
 
     /** @test */
     public function it_requests_for_access_token_successfully()
@@ -42,13 +44,21 @@ class GuzzleFacebookApiTest extends AdapterTestCase
     {
         $this->thereIsFacebookApiResponseWithWrongToken();
 
+        $this->adapter->accessToken('correct-code');
+    }
+
+    /** @test */
+    public function it_logs_when_unable_to_parse_token_from_response_during_requesting_for_access_token()
+    {
+        $this->thereIsFacebookApiResponseWithWrongToken();
+        $this->guzzleFacebookApiHasLoggerEnabled();
+
         try {
             $this->adapter->accessToken('correct-code');
         } catch (\Exception $e) {
-            $this->assertThatLogWithMessageWasCreated('Unable to get access token from response');
-
-            throw $e;
         }
+
+        $this->assertThatLogWithMessageWasCreated('Unable to get access token from response');
     }
 
     /**
@@ -60,13 +70,21 @@ class GuzzleFacebookApiTest extends AdapterTestCase
     {
         $this->thereIsFacebookApiException();
 
+        $this->adapter->accessToken('correct-code');
+    }
+
+    /** @test */
+    public function it_logs_when_facebook_api_throws_an_exception_during_requesting_for_access_token()
+    {
+        $this->thereIsFacebookApiException();
+        $this->guzzleFacebookApiHasLoggerEnabled();
+
         try {
             $this->adapter->accessToken('correct-code');
         } catch (\Exception $e) {
-            $this->assertThatLogWithMessageWasCreated('An error with facebook graph api occurred');
-
-            throw $e;
         }
+
+        $this->assertThatLogWithMessageWasCreated('An error with facebook graph api occurred');
     }
 
     /**
@@ -78,13 +96,21 @@ class GuzzleFacebookApiTest extends AdapterTestCase
     {
         $this->thereIsFacebookApiUnsuccessfulResponse();
 
+        $this->adapter->accessToken('correct-code');
+    }
+
+    /** @test */
+    public function it_logs_when_facebook_api_returns_unsuccessful_response_during_requesting_for_access_token()
+    {
+        $this->thereIsFacebookApiUnsuccessfulResponse();
+        $this->guzzleFacebookApiHasLoggerEnabled();
+
         try {
             $this->adapter->accessToken('correct-code');
         } catch (\Exception $e) {
-            $this->assertThatLogWithMessageWasCreated('An error with facebook graph api occurred');
-
-            throw $e;
         }
+
+        $this->assertThatLogWithMessageWasCreated('An error with facebook graph api occurred');
     }
 
     /** @test */
@@ -104,13 +130,22 @@ class GuzzleFacebookApiTest extends AdapterTestCase
     {
         $this->thereIsFacebookApiResponseWithWrongJson();
 
+        $this->adapter->me($this->accessToken());
+    }
+
+
+    /** @test */
+    public function it_logs_when_unable_to_parse_json_response_during_retrieving_me_fields()
+    {
+        $this->thereIsFacebookApiResponseWithWrongJson();
+        $this->guzzleFacebookApiHasLoggerEnabled();
+
         try {
             $this->adapter->me($this->accessToken());
         } catch (\Exception $e) {
-            $this->assertThatLogWithMessageWasCreated('Facebook graph api response body is not in JSON format');
-
-            throw $e;
         }
+
+        $this->assertThatLogWithMessageWasCreated('Facebook graph api response body is not in JSON format');
     }
 
     /**
@@ -122,13 +157,21 @@ class GuzzleFacebookApiTest extends AdapterTestCase
     {
         $this->thereIsFacebookApiException();
 
+        $this->adapter->me($this->accessToken());
+    }
+
+    /** @test */
+    public function it_logs_when_facebook_api_throws_an_exception_during_retrieving_me_fields()
+    {
+        $this->thereIsFacebookApiException();
+        $this->guzzleFacebookApiHasLoggerEnabled();
+
         try {
             $this->adapter->me($this->accessToken());
         } catch (\Exception $e) {
-            $this->assertThatLogWithMessageWasCreated('An error with facebook graph api occurred');
-
-            throw $e;
         }
+
+        $this->assertThatLogWithMessageWasCreated('An error with facebook graph api occurred');
     }
 
     /**
@@ -140,13 +183,21 @@ class GuzzleFacebookApiTest extends AdapterTestCase
     {
         $this->thereIsFacebookApiWithoutRequiredMeFields();
 
+        $this->adapter->me($this->accessToken());
+    }
+
+    /** @test */
+    public function it_logs_when_facebook_api_returns_me_without_required_fields()
+    {
+        $this->thereIsFacebookApiWithoutRequiredMeFields();
+        $this->guzzleFacebookApiHasLoggerEnabled();
+
         try {
             $this->adapter->me($this->accessToken());
         } catch (\Exception $e) {
-            $this->assertThatLogWithMessageWasCreated('Facebook graph api should return response with all required fields');
-
-            throw $e;
         }
+
+        $this->assertThatLogWithMessageWasCreated('Facebook graph api should return response with all required fields');
     }
 
     /** {@inheritdoc} */
@@ -154,6 +205,7 @@ class GuzzleFacebookApiTest extends AdapterTestCase
     {
         parent::setUp();
 
+        $this->logger = new FakeLogger();
         $this->guzzleClient = new Client();
 
         $this->adapter = new GuzzleFacebookApi($this->guzzleClient, 'http://localhost/facebook/login', '1234', 'secret');
@@ -165,9 +217,10 @@ class GuzzleFacebookApiTest extends AdapterTestCase
     /** {@inheritdoc} */
     protected function tearDown()
     {
-        $this->adapter = null;
+        $this->logger = null;
         $this->guzzleClient = null;
         $this->history = null;
+        $this->adapter = null;
 
         parent::tearDown();
     }
@@ -256,15 +309,33 @@ class GuzzleFacebookApiTest extends AdapterTestCase
         $this->assertNotNull($fields['name']);
     }
 
+    private function assertThatLogWithMessageWasCreated($expectedMessage)
+    {
+        $logWasCreated = false;
+        foreach ($this->logger->getLogs() as $log) {
+            if (false !== strpos($log['message'], $expectedMessage)) {
+                $logWasCreated = true;
+                break;
+            }
+        }
+
+        $this->assertTrue($logWasCreated);
+    }
+
     private function mockResponse($status, $body = null)
     {
         $mock = new Mock();
         if ($status === 200) {
-            $mock->addResponse(new Response($status, [], ($body === null) ? null : Stream::factory($body)));
+            $mock->addResponse(new Response($status, array(), ($body === null) ? null : Stream::factory($body)));
         } else {
             $mock->addException(new RequestException('Exception', new Request('GET', 'http://graph.facebook.com/xyz')));
         }
 
         $this->guzzleClient->getEmitter()->attach($mock);
+    }
+
+    private function guzzleFacebookApiHasLoggerEnabled()
+    {
+        $this->adapter = new GuzzleFacebookApi($this->guzzleClient, 'http://localhost/facebook/login', '1234', 'secret', $this->logger);
     }
 }
