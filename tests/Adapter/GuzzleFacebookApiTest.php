@@ -13,7 +13,7 @@ use GuzzleHttp\Subscriber\History;
 use GuzzleHttp\Subscriber\Mock;
 use Lucaszz\FacebookAuthenticationAdapter\Adapter\GuzzleFacebookApi;
 
-class GuzzleFacebookApiTest extends AdapterTestCase
+class GuzzleFacebookApiTest extends \PHPUnit_Framework_TestCase
 {
     /** @var ClientInterface */
     private $guzzleClient;
