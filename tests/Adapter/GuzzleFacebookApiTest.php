@@ -19,7 +19,7 @@ class GuzzleFacebookApiTest extends \PHPUnit_Framework_TestCase
     private $guzzleClient;
     /** @var History */
     private $history;
-    /** @var FakeLogger */
+    /** @var Logger */
     private $logger;
     /** @var GuzzleFacebookApi */
     private $adapter;
@@ -215,7 +215,7 @@ class GuzzleFacebookApiTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
 
-        $this->logger = new FakeLogger();
+        $this->logger = new Logger();
         $this->guzzleClient = new Client();
 
         $this->adapter = new GuzzleFacebookApi($this->guzzleClient, 'http://localhost/facebook/login', '1234', 'secret');

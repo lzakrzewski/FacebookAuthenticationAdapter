@@ -4,15 +4,15 @@ namespace Lucaszz\FacebookAuthenticationAdapter\Tests\Adapter;
 
 use Psr\Log\AbstractLogger;
 
-class FakeLogger extends AbstractLogger
+class Logger extends AbstractLogger
 {
     /** @var array */
-    private static $logs;
+    private $logs;
 
     /** {@inheritdoc} */
     public function getLogs()
     {
-        return static::$logs;
+        return $this->logs;
     }
 
     /** {@inheritdoc} */
@@ -24,7 +24,7 @@ class FakeLogger extends AbstractLogger
     /** {@inheritdoc} */
     public function log($level, $message, array $context = array())
     {
-        static::$logs[] = array(
+        $this->logs[] = array(
             'message' => $message,
         );
     }
