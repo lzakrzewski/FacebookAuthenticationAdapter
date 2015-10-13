@@ -124,11 +124,24 @@ class GuzzleFacebookApiTest extends \PHPUnit_Framework_TestCase
     }
 
     /** @test */
-    public function it_can_retrieve_me_fields_successfully()
+    public function it_can_retrieve_user_node_successfully()
     {
-        $fields = $this->adapter->me($this->accessToken());
+        $requestedFields = array('first_name', 'last_name', 'gender', 'email', 'birthday', 'name');
 
-        $this->assertThatRequiredMeFieldsExists($fields);
+        $userNode = $this->adapter->me($this->accessToken(), $requestedFields);
+
+        $this->assertThatUserNodeContainsRequiredFields($requestedFields, $userNode);
+        $this->assertThatUserNodeContainsId($userNode);
+        $this->assertThatUserNodeContainsName($userNode);
+    }
+
+    /** @test */
+    public function it_can_retrieve_empty_user_node_successfully()
+    {
+        $userNode = $this->adapter->me($this->accessToken(), array());
+
+        $this->assertThatUserNodeContainsId($userNode);
+        $this->assertThatUserNodeContainsName($userNode);
     }
 
     /**
@@ -136,7 +149,7 @@ class GuzzleFacebookApiTest extends \PHPUnit_Framework_TestCase
      *
      * @expectedException \Lucaszz\FacebookAuthenticationAdapter\Adapter\FacebookApiException
      */
-    public function it_fails_when_unable_to_parse_json_response_during_retrieving_me_fields()
+    public function it_fails_when_unable_to_parse_json_response_during_retrieving_user_node()
     {
         $this->thereIsFacebookApiResponseWithWrongJson();
 
@@ -145,7 +158,7 @@ class GuzzleFacebookApiTest extends \PHPUnit_Framework_TestCase
 
 
     /** @test */
-    public function it_logs_when_unable_to_parse_json_response_during_retrieving_me_fields()
+    public function it_logs_when_unable_to_parse_json_response_during_retrieving_user_node()
     {
         $this->thereIsFacebookApiResponseWithWrongJson();
         $this->guzzleFacebookApiHasLoggerEnabled();
@@ -182,32 +195,6 @@ class GuzzleFacebookApiTest extends \PHPUnit_Framework_TestCase
         }
 
         $this->assertThatLogWithMessageWasCreated('An error with facebook graph api occurred');
-    }
-
-    /**
-     * @test
-     *
-     * @expectedException \Lucaszz\FacebookAuthenticationAdapter\Adapter\FacebookApiException
-     */
-    public function it_fails_when_facebook_api_returns_me_without_required_fields()
-    {
-        $this->thereIsFacebookApiWithoutRequiredMeFields();
-
-        $this->adapter->me($this->accessToken());
-    }
-
-    /** @test */
-    public function it_logs_when_facebook_api_returns_me_without_required_fields()
-    {
-        $this->thereIsFacebookApiWithoutRequiredMeFields();
-        $this->guzzleFacebookApiHasLoggerEnabled();
-
-        try {
-            $this->adapter->me($this->accessToken());
-        } catch (\Exception $e) {
-        }
-
-        $this->assertThatLogWithMessageWasCreated('Facebook graph api should return response with all required fields');
     }
 
     /** {@inheritdoc} */
@@ -264,11 +251,6 @@ class GuzzleFacebookApiTest extends \PHPUnit_Framework_TestCase
         $this->mockResponse(200, 'xyz');
     }
 
-    private function thereIsFacebookApiWithoutRequiredMeFields()
-    {
-        $this->mockResponse(200, json_encode(array('id' => '12345', 'name' => 'xyz')));
-    }
-
     private function thereIsFacebookApiException()
     {
         $this->mockResponse(500);
@@ -276,21 +258,12 @@ class GuzzleFacebookApiTest extends \PHPUnit_Framework_TestCase
 
     private function accessToken()
     {
-        $file = 'https://gist.githubusercontent.com/Lucaszz/a36984dd6691ab53092d/raw/e1b3c9168f1ea0e4e29c1e659627a4732ba5ce85/accessToken_1440969823';
-
-        if ($resource = fopen($file, 'r')) {
-            $accessToken = fgets($resource);
-            fclose($resource);
-
-            return $accessToken;
-        }
-
-        throw new \Exception('Unable to read file with access token');
+        return 'CAANBRgGtA1EBAIaNgZCLkoup2gDbwdfUml0Eu3n3ZBYfhX8NoymuKyJEMWAs0xjTXZA5ZBPBop8BHCC6ezquPA74mTTPgCX0H1AaimhtU8SZCEdIMEqR9k2qUBYRaZCd44lh6ql52unz4WpnZAaKo4sOj0Dc8X0ZC1eANZCOj6GZBlCbzfcgxjCU3UsaYIZCFZBZBi9wZD';
     }
 
     private function expectedSuccessfulAccessTokenRequest()
     {
-        $request = new Request('GET', 'https://graph.facebook.com/oauth/access_token');
+        $request = new Request('GET', 'https://graph.facebook.com/v2.4/oauth/access_token');
         $query = $request->getQuery();
 
         $query->set('client_id', '1234');
@@ -307,16 +280,24 @@ class GuzzleFacebookApiTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedRequest->getUrl(), $request->getUrl());
     }
 
-    private function assertThatRequiredMeFieldsExists(array $fields)
+    private function assertThatUserNodeContainsRequiredFields(array $requiredFields, array $userNode)
     {
-        $this->assertArrayHasKey('id', $fields);
-        $this->assertNotNull($fields['id']);
+        foreach ($requiredFields as $requiredField) {
+            $this->assertArrayHasKey($requiredField, $userNode);
+            $this->assertNotNull($userNode[$requiredField]);
+        }
+    }
 
-        $this->assertArrayHasKey('email', $fields);
-        $this->assertNotNull($fields['email']);
+    private function assertThatUserNodeContainsId($userNode)
+    {
+        $this->assertArrayHasKey('id', $userNode);
+        $this->assertNotNull($userNode['id']);
+    }
 
-        $this->assertArrayHasKey('name', $fields);
-        $this->assertNotNull($fields['name']);
+    private function assertThatUserNodeContainsName($userNode)
+    {
+        $this->assertArrayHasKey('name', $userNode);
+        $this->assertNotNull($userNode['name']);
     }
 
     private function assertThatLogWithMessageWasCreated($expectedMessage)

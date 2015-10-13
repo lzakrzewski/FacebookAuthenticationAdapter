@@ -60,9 +60,9 @@ class GuzzleFacebookApi implements FacebookApi
     }
 
     /** {@inheritdoc} */
-    public function me($accessToken)
+    public function me($accessToken, array $fields = array())
     {
-        $request = $this->meRequest($accessToken);
+        $request = $this->meRequest($accessToken, $fields);
 
         try {
             $response = $this->client->send($request);
@@ -74,10 +74,6 @@ class GuzzleFacebookApi implements FacebookApi
             $fields = $response->json();
         } catch (\RuntimeException $e) {
             throw $this->facebookApiException(sprintf('Facebook graph api response body is not in JSON format: %s given.', $response->getBody()), $request, $response);
-        }
-
-        if (!isset($fields['id']) || !isset($fields['name']) || !isset($fields['email'])) {
-            throw $this->facebookApiException(sprintf('Facebook graph api should return response with all required fields. Id, name, email are required %s given', implode(', ', array_keys($fields))), $request, $response);
         }
 
         return $fields;
@@ -96,12 +92,15 @@ class GuzzleFacebookApi implements FacebookApi
         return $request;
     }
 
-    private function meRequest($accessToken)
+    private function meRequest($accessToken, array $fields)
     {
         $request = $this->client->createRequest('GET', FacebookApi::GRAPH_API_ME_URL);
         $query = $request->getQuery();
 
         $query->set('access_token', $accessToken);
+        if (!empty($fields)) {
+            $query->set('fields', implode(',', $fields));
+        }
 
         return $request;
     }
