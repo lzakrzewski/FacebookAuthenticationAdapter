@@ -15,8 +15,8 @@ namespace Lucaszz\FacebookAuthenticationAdapter\Adapter;
 
 interface FacebookApi
 {
-    const GRAPH_API_ME_URL = 'https://graph.facebook.com/me';
-    const GRAPH_API_ACCESS_TOKEN_URL = 'https://graph.facebook.com/oauth/access_token';
+    const GRAPH_API_ME_URL = 'https://graph.facebook.com/v2.4/me';
+    const GRAPH_API_ACCESS_TOKEN_URL = 'https://graph.facebook.com/v2.4/oauth/access_token';
 
     /**
      * Returns access token during code exchange.
@@ -32,13 +32,14 @@ interface FacebookApi
     /**
      * Returns a single user node as array.
      *
-     * @param $accessToken
+     * @param string $accessToken
+     * @param array  $fields
      *
      * @throws FacebookApiException
      *
      * @return array
      */
-    public function me($accessToken);
+    public function me($accessToken, array $fields = array());
 }
 
 ```
@@ -77,7 +78,7 @@ if (isset($_GET['code'])) {
     $adapter = new Lucaszz\FacebookAuthenticationAdapter\Adapter\GuzzleFacebookApi($client, 'http://my.host/login', 123123123123123, 'app-secret');
 
     $accessToken = $adapter->accessToken($_GET['code']);
-    $userData = $adapter->me($accessToken);
+    $userData = $adapter->me($accessToken, array('first_name', 'last_name', 'gender', 'email', 'birthday', 'name'));
 
     //Your own logic to process facebook user data
 }
