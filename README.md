@@ -1,12 +1,12 @@
 # FacebookAuthenticationAdapter
-[![Build Status](https://travis-ci.org/Lucaszz/FacebookAuthenticationAdapter.svg)](https://travis-ci.org/Lucaszz/FacebookAuthenticationAdapter)
+[![Build Status](https://travis-ci.org/Lucaszz/FacebookAuthenticationAdapter.svg)](https://travis-ci.org/Lucaszz/FacebookAuthenticationAdapter) [![Latest Stable Version](https://poser.pugx.org/lucaszz/facebook-authentication-adapter/v/stable)](https://packagist.org/packages/lucaszz/facebook-authentication-adapter) [![Total Downloads](https://poser.pugx.org/lucaszz/facebook-authentication-adapter/downloads)](https://packagist.org/packages/lucaszz/facebook-authentication-adapter) 
 
-Description
---------
 Adapter for communication with Facebook GRAPH API.
 
 FacebookAuthenticationAdapter is simple library for communication with Facebook GRAPH API.
-It returns access token and user data. [Read about facebook api access tokens](https://developers.facebook.com/docs/facebook-login/access-tokens).
+It returns access token and user node as array. [Read about facebook api access tokens](https://developers.facebook.com/docs/facebook-login/access-tokens/v2.5).
+
+This library is independent part of [FacebookAuthenticationBundle](https://github.com/Lucaszz/FacebookAuthenticationBundle).
 
 ```php
 <?php
@@ -15,8 +15,8 @@ namespace Lucaszz\FacebookAuthenticationAdapter\Adapter;
 
 interface FacebookApi
 {
-    const GRAPH_API_ME_URL = 'https://graph.facebook.com/v2.4/me';
-    const GRAPH_API_ACCESS_TOKEN_URL = 'https://graph.facebook.com/v2.4/oauth/access_token';
+    const GRAPH_API_ME_URL = 'https://graph.facebook.com/v2.5/me';
+    const GRAPH_API_ACCESS_TOKEN_URL = 'https://graph.facebook.com/v2.5/oauth/access_token';
 
     /**
      * Returns access token during code exchange.
@@ -41,7 +41,6 @@ interface FacebookApi
      */
     public function me($accessToken, array $fields = array());
 }
-
 ```
 
 Requirements
@@ -69,7 +68,7 @@ Example
 require 'vendor/autoload.php';
 
 if (!isset($_GET['code'])) {
-    header("Location: https://www.facebook.com/dialog/oauth");
+    header("Location: https://www.facebook.com/v2.5/dialog/oauth");
 }
 
 if (isset($_GET['code'])) {
@@ -78,9 +77,9 @@ if (isset($_GET['code'])) {
     $adapter = new Lucaszz\FacebookAuthenticationAdapter\Adapter\GuzzleFacebookApi($client, 'http://my.host/login', 123123123123123, 'app-secret');
 
     $accessToken = $adapter->accessToken($_GET['code']);
-    $userData = $adapter->me($accessToken, array('first_name', 'last_name', 'gender', 'email', 'birthday', 'name'));
+    $userNode = $adapter->me($accessToken, array('first_name', 'last_name', 'gender', 'email', 'birthday', 'name'));
 
-    //Your own logic to process facebook user data
+    //Your own logic to process facebook user node
 }
 
 ```
