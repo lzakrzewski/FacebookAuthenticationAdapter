@@ -52,6 +52,10 @@ Requirements
   }
 ```
 
+Supported Facebook API version
+--------
+- v2.5
+
 Installation
 --------
 Require the library with composer:
