@@ -107,10 +107,11 @@ class GuzzleFacebookApi implements FacebookApi
 
     private function accessTokenFromResponse(ResponseInterface $response)
     {
-        $body = (string) $response->getBody();
-
-        $data = array();
-        parse_str($body, $data);
+        try {
+            $data = $response->json();
+        } catch (\RuntimeException $e) {
+            return ;
+        }
 
         if (isset($data['access_token'])) {
             return $data['access_token'];

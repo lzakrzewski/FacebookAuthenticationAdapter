@@ -226,10 +226,11 @@ class GuzzleFacebookApiTest extends \PHPUnit_Framework_TestCase
     {
         $body = array(
             'access_token' => 'access-token',
+            'token_type' => 'bearer',
             'expires' => (string) (time() + 100),
         );
 
-        $this->mockResponse(200, http_build_query($body));
+        $this->mockResponse(200, json_encode($body));
     }
 
     private function thereIsFacebookApiResponseWithWrongToken()
@@ -258,7 +259,7 @@ class GuzzleFacebookApiTest extends \PHPUnit_Framework_TestCase
 
     private function accessToken()
     {
-        return 'CAANBRgGtA1EBAIaNgZCLkoup2gDbwdfUml0Eu3n3ZBYfhX8NoymuKyJEMWAs0xjTXZA5ZBPBop8BHCC6ezquPA74mTTPgCX0H1AaimhtU8SZCEdIMEqR9k2qUBYRaZCd44lh6ql52unz4WpnZAaKo4sOj0Dc8X0ZC1eANZCOj6GZBlCbzfcgxjCU3UsaYIZCFZBZBi9wZD';
+        return 'CAANBRgGtA1EBAJNFu6pX7Co3z0nv8vARhu15fZA2nh1N11lzcFlY6rBgRuxZBkjsAZBRSoDFS4DymPU2xGp4aN3GrH4T9FfZA5QAlBZA4ImYgZAs0ZC3FWkMq0iLLjP1H2DXeZBBBfiPMtzSkjqhpN7MP34bFBd35wwLPjZBB0Ij3Y0ZA3f3hWqaCs1rReJYpowfIZD';
     }
 
     private function expectedSuccessfulAccessTokenRequest()
