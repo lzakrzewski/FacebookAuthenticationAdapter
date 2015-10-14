@@ -4,8 +4,8 @@ namespace Lucaszz\FacebookAuthenticationAdapter\Adapter;
 
 interface FacebookApi
 {
-    const GRAPH_API_ME_URL = 'https://graph.facebook.com/v2.4/me';
-    const GRAPH_API_ACCESS_TOKEN_URL = 'https://graph.facebook.com/v2.4/oauth/access_token';
+    const GRAPH_API_ME_URL = 'https://graph.facebook.com/v2.5/me';
+    const GRAPH_API_ACCESS_TOKEN_URL = 'https://graph.facebook.com/v2.5/oauth/access_token';
 
     /**
      * Returns access token during code exchange.

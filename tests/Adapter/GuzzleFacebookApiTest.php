@@ -264,7 +264,7 @@ class GuzzleFacebookApiTest extends \PHPUnit_Framework_TestCase
 
     private function expectedSuccessfulAccessTokenRequest()
     {
-        $request = new Request('GET', 'https://graph.facebook.com/v2.4/oauth/access_token');
+        $request = new Request('GET', 'https://graph.facebook.com/v2.5/oauth/access_token');
         $query = $request->getQuery();
 
         $query->set('client_id', '1234');
