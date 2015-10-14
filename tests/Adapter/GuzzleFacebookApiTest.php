@@ -259,7 +259,7 @@ class GuzzleFacebookApiTest extends \PHPUnit_Framework_TestCase
 
     private function accessToken()
     {
-        return 'CAANBRgGtA1EBAJNFu6pX7Co3z0nv8vARhu15fZA2nh1N11lzcFlY6rBgRuxZBkjsAZBRSoDFS4DymPU2xGp4aN3GrH4T9FfZA5QAlBZA4ImYgZAs0ZC3FWkMq0iLLjP1H2DXeZBBBfiPMtzSkjqhpN7MP34bFBd35wwLPjZBB0Ij3Y0ZA3f3hWqaCs1rReJYpowfIZD';
+        return 'CAALLLZAKsqXcBAK30bklMiT9UeR92hTrKKMyBgD9hPXjRcag3fZAOMo7hZB99zxDhr3mTaWI7ctxeZBePzU5r4yZCYL9Rx1ye1orQpkhnQV9ChgkBznCKpXg1j0s9W6BpEYyvc0FBXSaZAC6BFcazNZB3ofUGtXveYZBeaiCT88hP6NlZA8M9OVbKhswZAADltvSYZD';
     }
 
     private function expectedSuccessfulAccessTokenRequest()
