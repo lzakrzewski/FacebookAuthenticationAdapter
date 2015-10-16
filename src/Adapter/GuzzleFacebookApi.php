@@ -4,8 +4,10 @@ namespace Lucaszz\FacebookAuthenticationAdapter\Adapter;
 
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\RequestException;
-use GuzzleHttp\Message\RequestInterface;
-use GuzzleHttp\Message\ResponseInterface;
+use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Uri;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 
 class GuzzleFacebookApi implements FacebookApi
 {
@@ -41,6 +43,14 @@ class GuzzleFacebookApi implements FacebookApi
     }
 
     /** {@inheritdoc} */
+    public function dialog()
+    {
+        $url = sprintf(FacebookApi::OAUTH_DIALOG_URL.'?client_id=%d&redirect_uri=%s', $this->appId, urlencode($this->redirectUri));
+        header("Location: {$url}");
+        exit;
+    }
+
+    /** {@inheritdoc} */
     public function accessToken($code)
     {
         $request = $this->accessTokenRequest($code);
@@ -71,7 +81,7 @@ class GuzzleFacebookApi implements FacebookApi
         }
 
         try {
-            $fields = $response->json();
+            $fields = json_decode($response->getBody(), true);
         } catch (\RuntimeException $e) {
             throw $this->facebookApiException(sprintf('Facebook graph api response body is not in JSON format: %s given.', $response->getBody()), $request, $response);
         }
@@ -81,34 +91,34 @@ class GuzzleFacebookApi implements FacebookApi
 
     private function accessTokenRequest($code)
     {
-        $request = $this->client->createRequest('GET', FacebookApi::GRAPH_API_ACCESS_TOKEN_URL);
-        $query = $request->getQuery();
+        $request = new Request('GET', FacebookApi::GRAPH_API_ACCESS_TOKEN_URL);
+        $query = $request->getUri();
 
-        $query->set('client_id', $this->appId);
-        $query->set('redirect_uri', $this->redirectUri);
-        $query->set('client_secret', $this->appSecret);
-        $query->set('code', $code);
+        $query = Uri::withQueryValue($query, 'client_id', $this->appId);
+        $query = Uri::withQueryValue($query, 'redirect_uri', urlencode($this->redirectUri));
+        $query = Uri::withQueryValue($query, 'client_secret', $this->appSecret);
+        $query = Uri::withQueryValue($query, 'code', $code);
 
-        return $request;
+        return $request->withUri($query);
     }
 
     private function meRequest($accessToken, array $fields)
     {
-        $request = $this->client->createRequest('GET', FacebookApi::GRAPH_API_ME_URL);
-        $query = $request->getQuery();
+        $request = new Request('GET', FacebookApi::GRAPH_API_ME_URL);
+        $query = $request->getUri();
 
-        $query->set('access_token', $accessToken);
+        $query = Uri::withQueryValue($query, 'access_token', $accessToken);
         if (!empty($fields)) {
-            $query->set('fields', implode(',', $fields));
+            $query = Uri::withQueryValue($query, 'fields', implode(',', $fields));
         }
 
-        return $request;
+        return $request->withUri($query);
     }
 
     private function accessTokenFromResponse(ResponseInterface $response)
     {
         try {
-            $data = $response->json();
+            $data = json_decode($response->getBody(), true);
         } catch (\RuntimeException $e) {
             return ;
         }
