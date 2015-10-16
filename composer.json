@@ -1,10 +1,10 @@
 {
-  "name": "lucaszz/facebook-authentication-adapter",
+  "name": "buldezir/facebook-authentication-adapter",
   "type": "library",
   "description": "Adapter for communication with Facebook GRAPH API",
   "require": {
     "php": ">=5.4",
-    "guzzlehttp/guzzle": "~5.0"
+    "guzzlehttp/guzzle": "*"
   },
   "license": "MIT",
   "authors": [

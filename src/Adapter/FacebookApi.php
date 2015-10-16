@@ -4,8 +4,16 @@ namespace Lucaszz\FacebookAuthenticationAdapter\Adapter;
 
 interface FacebookApi
 {
+    const OAUTH_DIALOG_URL = 'https://www.facebook.com/v2.5/dialog/oauth';
     const GRAPH_API_ME_URL = 'https://graph.facebook.com/v2.5/me';
     const GRAPH_API_ACCESS_TOKEN_URL = 'https://graph.facebook.com/v2.5/oauth/access_token';
+
+    /**
+     * Redirect to facebook
+     *
+     * @return void
+     */
+    public function dialog();
 
     /**
      * Returns access token during code exchange.
