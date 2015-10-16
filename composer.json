@@ -1,5 +1,5 @@
 {
-  "name": "lucaszz/facebook-authentication-adapter",
+  "name": "buldezir/facebook-authentication-adapter",
   "type": "library",
   "description": "Adapter for communication with Facebook GRAPH API",
   "require": {
