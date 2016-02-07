@@ -1,6 +1,6 @@
 <?php
 
-namespace Lucaszz\FacebookAuthenticationAdapter\Adapter;
+namespace Lzakrzewski\FacebookAuthenticationAdapter\Adapter;
 
 interface FacebookApi
 {

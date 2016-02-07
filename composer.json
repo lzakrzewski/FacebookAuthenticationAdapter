@@ -1,5 +1,5 @@
 {
-  "name": "lucaszz/facebook-authentication-adapter",
+  "name": "lzakrzewski/facebook-authentication-adapter",
   "type": "library",
   "description": "Adapter for communication with Facebook GRAPH API",
   "require": {
@@ -9,18 +9,18 @@
   "license": "MIT",
   "authors": [
     {
-      "name": "lucaszz111",
-      "email": "lucaszz111@gmail.com"
+      "name": "lzakrzewski",
+      "email": "contact@lzakrzewski.com"
     }
   ],
   "autoload": {
     "psr-4": {
-      "Lucaszz\\FacebookAuthenticationAdapter\\": "src"
+      "Lzakrzewski\\FacebookAuthenticationAdapter\\": "src"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "Lucaszz\\FacebookAuthenticationAdapter\\Tests\\": "tests"
+      "Lzakrzewski\\FacebookAuthenticationAdapter\\Tests\\": "tests"
     }
   },
   "require-dev": {

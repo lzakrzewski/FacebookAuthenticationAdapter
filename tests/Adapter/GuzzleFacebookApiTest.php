@@ -1,6 +1,6 @@
 <?php
 
-namespace Lucaszz\FacebookAuthenticationAdapter\Tests\Adapter;
+namespace Lzakrzewski\FacebookAuthenticationAdapter\Tests\Adapter;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
@@ -11,7 +11,7 @@ use GuzzleHttp\Message\Response;
 use GuzzleHttp\Stream\Stream;
 use GuzzleHttp\Subscriber\History;
 use GuzzleHttp\Subscriber\Mock;
-use Lucaszz\FacebookAuthenticationAdapter\Adapter\GuzzleFacebookApi;
+use Lzakrzewski\FacebookAuthenticationAdapter\Adapter\GuzzleFacebookApi;
 
 class GuzzleFacebookApiTest extends \PHPUnit_Framework_TestCase
 {
@@ -38,7 +38,7 @@ class GuzzleFacebookApiTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      *
-     * @expectedException \Lucaszz\FacebookAuthenticationAdapter\Adapter\FacebookApiException
+     * @expectedException \Lzakrzewski\FacebookAuthenticationAdapter\Adapter\FacebookApiException
      */
     public function it_fails_when_unable_to_parse_token_from_response_during_requesting_for_access_token()
     {
@@ -74,7 +74,7 @@ class GuzzleFacebookApiTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      *
-     * @expectedException \Lucaszz\FacebookAuthenticationAdapter\Adapter\FacebookApiException
+     * @expectedException \Lzakrzewski\FacebookAuthenticationAdapter\Adapter\FacebookApiException
      */
     public function it_fails_when_facebook_api_throws_an_exception_during_requesting_for_access_token()
     {
@@ -100,7 +100,7 @@ class GuzzleFacebookApiTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      *
-     * @expectedException \Lucaszz\FacebookAuthenticationAdapter\Adapter\FacebookApiException
+     * @expectedException \Lzakrzewski\FacebookAuthenticationAdapter\Adapter\FacebookApiException
      */
     public function it_fails_when_facebook_api_returns_unsuccessful_response_during_requesting_for_access_token()
     {
@@ -147,7 +147,7 @@ class GuzzleFacebookApiTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      *
-     * @expectedException \Lucaszz\FacebookAuthenticationAdapter\Adapter\FacebookApiException
+     * @expectedException \Lzakrzewski\FacebookAuthenticationAdapter\Adapter\FacebookApiException
      */
     public function it_fails_when_unable_to_parse_json_response_during_retrieving_user_node()
     {
@@ -174,7 +174,7 @@ class GuzzleFacebookApiTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      *
-     * @expectedException \Lucaszz\FacebookAuthenticationAdapter\Adapter\FacebookApiException
+     * @expectedException \Lzakrzewski\FacebookAuthenticationAdapter\Adapter\FacebookApiException
      */
     public function it_fails_when_facebook_api_throws_an_exception_during_retrieving_me_fields()
     {
@@ -259,7 +259,7 @@ class GuzzleFacebookApiTest extends \PHPUnit_Framework_TestCase
 
     private function accessToken()
     {
-        return 'CAALLLZAKsqXcBAK30bklMiT9UeR92hTrKKMyBgD9hPXjRcag3fZAOMo7hZB99zxDhr3mTaWI7ctxeZBePzU5r4yZCYL9Rx1ye1orQpkhnQV9ChgkBznCKpXg1j0s9W6BpEYyvc0FBXSaZAC6BFcazNZB3ofUGtXveYZBeaiCT88hP6NlZA8M9OVbKhswZAADltvSYZD';
+        return 'CAACEdEose0cBAGmedlZBajFgRwXDS0ZAerYkKPTZBzD16ZBImRiWFMVqPg5WOQRsboo1L5xZAFsbmnVcsOdwKbZBIcM6yAdzeGld7yhuEa8AlPft7f92DjMxiLOWwTQ9lLv8pnZA6eO7rFpvvdAkZCdtmjZA2ZBHAxdDsvBL825v7x5yYEHTzTtM8We18KhO0dpI6BmwZA4wLth39guU3ZAz2NH9';
     }
 
     private function expectedSuccessfulAccessTokenRequest()

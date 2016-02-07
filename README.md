@@ -1,17 +1,17 @@
 # FacebookAuthenticationAdapter
-[![Build Status](https://travis-ci.org/Lucaszz/FacebookAuthenticationAdapter.svg)](https://travis-ci.org/Lucaszz/FacebookAuthenticationAdapter) [![Latest Stable Version](https://poser.pugx.org/lucaszz/facebook-authentication-adapter/v/stable)](https://packagist.org/packages/lucaszz/facebook-authentication-adapter) [![Total Downloads](https://poser.pugx.org/lucaszz/facebook-authentication-adapter/downloads)](https://packagist.org/packages/lucaszz/facebook-authentication-adapter) 
+[![Build Status](https://travis-ci.org/lzakrzewski/FacebookAuthenticationAdapter.svg)](https://travis-ci.org/lzakrzewski/FacebookAuthenticationAdapter) [![Latest Stable Version](https://poser.pugx.org/lzakrzewski/facebook-authentication-adapter/v/stable)](https://packagist.org/packages/lzakrzewski/facebook-authentication-adapter) [![Total Downloads](https://poser.pugx.org/lzakrzewski/facebook-authentication-adapter/downloads)](https://packagist.org/packages/lzakrzewski/facebook-authentication-adapter) 
 
 Adapter for communication with Facebook GRAPH API.
 
 FacebookAuthenticationAdapter is simple library for communication with Facebook GRAPH API.
 It returns access token and user node as array. [Read about facebook api access tokens](https://developers.facebook.com/docs/facebook-login/access-tokens/v2.5).
 
-This library is independent part of [FacebookAuthenticationBundle](https://github.com/Lucaszz/FacebookAuthenticationBundle).
+This library is independent part of [FacebookAuthenticationBundle](https://github.com/lzakrzewski/FacebookAuthenticationBundle).
 
 ```php
 <?php
 
-namespace Lucaszz\FacebookAuthenticationAdapter\Adapter;
+namespace Lzakrzewski\FacebookAuthenticationAdapter\Adapter;
 
 interface FacebookApi
 {
@@ -61,7 +61,7 @@ Installation
 Require the library with composer:
 
 ```sh
-composer require lucaszz/facebook-authentication-adapter "~1.0"
+composer require lzakrzewski/facebook-authentication-adapter "~1.0"
 ```
 
 Example
@@ -78,7 +78,7 @@ if (!isset($_GET['code'])) {
 if (isset($_GET['code'])) {
 
     $client = new GuzzleHttp\Client();
-    $adapter = new Lucaszz\FacebookAuthenticationAdapter\Adapter\GuzzleFacebookApi($client, 'http://my.host/login', 123123123123123, 'app-secret');
+    $adapter = new Lzakrzewski\FacebookAuthenticationAdapter\Adapter\GuzzleFacebookApi($client, 'http://my.host/login', 123123123123123, 'app-secret');
 
     $accessToken = $adapter->accessToken($_GET['code']);
     $userNode = $adapter->me($accessToken, array('first_name', 'last_name', 'gender', 'email', 'birthday', 'name'));

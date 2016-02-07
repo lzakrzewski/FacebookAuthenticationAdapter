@@ -1,6 +1,6 @@
 <?php
 
-namespace Lucaszz\FacebookAuthenticationAdapter\Adapter;
+namespace Lzakrzewski\FacebookAuthenticationAdapter\Adapter;
 
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\RequestException;

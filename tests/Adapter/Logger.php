@@ -1,6 +1,6 @@
 <?php
 
-namespace Lucaszz\FacebookAuthenticationAdapter\Tests\Adapter;
+namespace Lzakrzewski\FacebookAuthenticationAdapter\Tests\Adapter;
 
 use Psr\Log\AbstractLogger;
 
